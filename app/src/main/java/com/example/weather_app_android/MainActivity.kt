@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -58,20 +60,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun getLastLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     val latitude = location.latitude
                     val longitude = location.longitude
-                    android.util.Log.d("Location", "Lat: $latitude, Lng: $longitude")
+                    Log.d("Location", "Lat: $latitude, Lng: $longitude")
                     Toast.makeText(this, "Lat: $latitude, Lng: $longitude", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
-                android.util.Log.e("LocationError", "Error getting location", e)
+                Log.e("LocationError", "Error getting location", e)
             }
     }
 }
