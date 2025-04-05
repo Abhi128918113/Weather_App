@@ -62,7 +62,23 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    fetchWeather(location.latitude, location.longitude)
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+
+                    // Print coordinates
+                    println("Latitude: $latitude, Longitude: $longitude")
+
+                    // 🔗 Google Maps link
+                    val mapsUrl = "https://maps.google.com/?q=$latitude,$longitude"
+                    println("Open in Maps: $mapsUrl")
+
+                    android.util.Log.d("Location", "Lat: $latitude, Lng: $longitude")
+                    android.util.Log.d("Location", "Maps URL: $mapsUrl")
+
+                    Toast.makeText(this, "Location fetched!\nTap logcat to view", Toast.LENGTH_SHORT).show()
+
+                    // Call weather API with fetched location
+                    fetchWeather(latitude, longitude)
                 } else {
                     weatherTextView.text = "Couldn't get location"
                 }
@@ -71,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                 weatherTextView.text = "Failed to get location"
             }
     }
+
 
     private fun fetchWeather(latitude: Double, longitude: Double) {
         val retrofit = Retrofit.Builder()
